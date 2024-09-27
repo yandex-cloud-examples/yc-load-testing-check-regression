@@ -238,6 +238,29 @@ folder_id: b1g30b1ukltncq2jsdnn
 
 Информацию по конкретному тесту, которая доступна визуально на странице дашборда регрессий, можно получить и в виде текста (json/yaml). Для этого, нужно воспользоваться командой YC CLI `yc loadtesting test check-regression <TEST_ID>`.
 
+> [!IMPORTANT]
+> Справка по команде: [CLI Reference](https://yandex.cloud/ru/docs/cli/cli-ref/managed-services/loadtesting/test/check-regression)
+>  <details><summary>yc loadtesting test check-regression -h</summary>
+>
+>  ```
+>  Examples:
+>    check-regression <TEST-ID>
+>    check-regression <TEST-ID> --dashboard <DASHBOARD-NAME> --chart <CHART-NAME>
+>    check-regression <TEST-ID> --dashboard-id <DASHBOARD-ID> --chart-id <CHART-ID>
+>
+>
+>  Flags:
+>        --id string             Load testing test id.
+>    -e, --error-mode            Set a non-0 exit status of a command if a given test didn't pass regression checks, or no checks were performed.
+>        --dashboard-id string   ID of a regression dashboard to be checked.
+>        --dashboard string      Name of a regression dashboard to be checked.
+>        --chart-id string       ID of a regression chart to be checked.
+>        --chart string          Name of a regression chart to be checked.
+>  ```
+>
+></details>
+>
+
 Вызовем эту команду, передав ID двух запущенных ранее тестов:
 
 ```
@@ -275,9 +298,9 @@ folder_id: b1g30b1ukltncq2jsdnn
        OK       0    value <= 1   percent   Responses: protocol code (4xx, 5xx)   overall   const-vu-responses   example-com
 ```
 
-Так как тесты попадают на графики регрессий автоматически (если удовлетворяют "Правилам добавления теста" графика), команду использовать и для того, чтобы получить информацию по регрессиям для всех вновь запускаемых тестов.
+Так как тесты попадают на графики регрессий автоматически (если удовлетворяют "Правилам добавления теста" графика), подобную информацию можно получить и для всех последующих запусков.
 
-Для демонстрации, запустим `const-rps` тест еще раз, соединив инструкции запуска и получения информации о регрессиях:
+Для демонстрации, запустим `const-rps` тест еще раз, и сразу же запросим отчет о регрессиях:
 
 ```
 > ./result/1-run-test.sh configs/const-rps-test-config.yaml const-rps | grep "^id:" | head -1 | cut -w -f 2 | xargs yc loadtesting test check-regression
@@ -303,7 +326,6 @@ folder_id: b1g30b1ukltncq2jsdnn
        OK     100   value >= 95   percent        Responses: protocol code (200)   overall   const-rps-responses   example-com
        OK       0    value <= 1   percent   Responses: protocol code (4xx, 5xx)   overall   const-rps-responses   example-com
 ```
-
 
 ## Получение информации о нарушенных порогах
 
