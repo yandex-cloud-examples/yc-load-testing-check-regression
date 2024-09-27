@@ -1,0 +1,41 @@
+pandora:
+  enabled: true
+  package: yandextank.plugins.Pandora
+  config_content:
+    pools:
+      - id: HTTP
+        discard_overflow: false
+        gun:
+          type: http
+          target: 'example.com:443'
+          ssl: true
+        ammo:
+          type: uri
+          uris:
+            - '/'
+            - '/not-found'
+        startup:
+          type: once
+          times: 10
+        rps:
+          - duration: 30s
+            type: unlimited
+
+autostop:
+  enabled: true
+  package: yandextank.plugins.Autostop
+  # force stop if:
+  autostop:
+    # 1m min passed
+    - limit(1m)
+
+telegraf:
+  enabled: true
+  package: yandextank.plugins.Telegraf
+  config:
+    hosts:
+      localhost:
+    metrics:
+      cpu:
+      mem:
+      net:
